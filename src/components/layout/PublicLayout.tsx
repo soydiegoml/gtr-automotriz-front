@@ -60,7 +60,7 @@ function ThemedPublicLayout() {
               color="inherit" 
               variant="outlined"
               component={RouterLink} 
-              to="/admin/dashboard"
+              to="/admin/login"
               size={isMobile ? 'small' : 'medium'}
             >
               Admin Login

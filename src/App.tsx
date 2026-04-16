@@ -4,6 +4,8 @@ import PublicLayout from './components/layout/PublicLayout';
 import CatalogPage from './pages/CatalogPage'; // La página de gestión de inventario
 import PublicCatalogPage from './pages/PublicCatalogPage'; // La nueva página pública
 import { Typography } from '@mui/material';
+import ProtectedRoute from './components/auth/ProtectedRoute';
+import AdminLoginPage from './pages/AdminLoginPage';
 
 // Componente de marcador de posición para la página de inicio del admin
 const AdminHomePage = () => <Typography variant="h4">Resumen del Negocio (Dashboard)</Typography>;
@@ -23,7 +25,16 @@ function App() {
 
       {/* --- SECCIÓN DE ADMINISTRACIÓN (TEMA CLARO) --- */}
       {/* Todas las rutas que empiecen con /admin usarán el DashboardLayout */}
-      <Route path="/admin" element={<DashboardLayout />}>
+      <Route path="/admin/login" element={<AdminLoginPage />} />
+
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute>
+            <DashboardLayout />
+          </ProtectedRoute>
+        }
+      >
         <Route path="dashboard" element={<AdminHomePage />} />
         <Route path="inventario" element={<CatalogPage />} />
         

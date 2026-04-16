@@ -2,16 +2,20 @@
 import { Outlet, Link as RouterLink, useLocation } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import { lightTheme } from '../../theme';
-import { AppBar, Box, CssBaseline, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, CssBaseline, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
 
 // Iconos para el menú
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import InventoryIcon from '@mui/icons-material/Inventory';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useAuthStore } from '../../store/authStore';
 
 const drawerWidth = 240; // Ancho del menú lateral
 
 export default function DashboardLayout() {
   const location = useLocation();
+  const adminUser = useAuthStore((state) => state.adminUser);
+  const logout = useAuthStore((state) => state.logout);
 
   // La clave del cambio: los 'path' ahora incluyen el prefijo '/admin'
   const menuItems = [
@@ -55,9 +59,15 @@ export default function DashboardLayout() {
           sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
         >
           <Toolbar>
-            <Typography variant="h6" noWrap component="div">
+            <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
               Panel de Administración
             </Typography>
+            <Typography variant="body2" sx={{ mr: 2 }}>
+              {adminUser?.email}
+            </Typography>
+            <Button color="inherit" startIcon={<LogoutIcon />} onClick={logout}>
+              Salir
+            </Button>
           </Toolbar>
         </AppBar>
         
