@@ -3,6 +3,7 @@ import { ThemeProvider, useTheme } from '@mui/material/styles';
 import { darkTheme, yellowTheme } from '../../theme';
 import { AppBar, Box, CssBaseline, Toolbar, Typography, Button, useMediaQuery, Container } from '@mui/material';
 import { Outlet, Link as RouterLink } from 'react-router-dom';
+import logo from '../../assets/logo.png'; 
 
 // El componente principal ahora contiene toda la lógica.
 // Se envuelve en el ThemeProvider para que useMediaQuery pueda acceder al tema.
@@ -24,15 +25,36 @@ function ThemedPublicLayout() {
       >
         {/* El contenido del header se mantiene centrado en un contenedor 'xl' (más ancho) */}
         <Container maxWidth="xl">
-          <Toolbar disableGutters>
-            <Typography
-              variant={isMobile ? 'h6' : 'h5'}
+          <Toolbar
+            disableGutters
+            sx={{
+              minHeight: { xs: 88, sm: 104 },
+              gap: 2,
+              justifyContent: 'space-between'
+            }}
+          >
+            <Box
               component={RouterLink}
               to="/"
-              sx={{ flexGrow: 1, color: 'text.primary', textDecoration: 'none', fontWeight: 'bold' }}
+              sx={{
+                flexGrow: 1,
+                display: 'inline-flex',
+                alignItems: 'center',
+                minWidth: 0,
+                py: 1
+              }}
             >
-              GT Automotriz
-            </Typography>
+              <img
+                src={logo}
+                alt="DM Automotriz"
+                style={{
+                  height: isMobile ? 64 : 80,
+                  maxWidth: '100%',
+                  objectFit: 'contain',
+                  cursor: 'pointer'
+                }}
+              />
+            </Box>
             <Button 
               sx={{ color: 'text.primary', borderColor: 'rgba(0,0,0,0.23)' }} 
               color="inherit" 
