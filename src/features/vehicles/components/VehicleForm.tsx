@@ -21,6 +21,7 @@ const baseSchema = z.object({
   yearId: z.number({ invalid_type_error: 'Debes seleccionar un año' }).min(1, 'Debes seleccionar un año'),
   agencyId: z.number({ invalid_type_error: 'Debes seleccionar una agencia' }).min(1, 'Debes seleccionar una agencia'),
   price: z.number({ required_error: 'El precio es requerido' }).positive('El precio debe ser mayor a 0'),
+  mileage: z.number({ required_error: 'El kilometraje es requerido' }).nonnegative('El kilometraje no puede ser negativo'),
   color: z.string().min(3, 'El color es requerido'),
   vin: z.string().optional(),
   description: z.string().optional(),
@@ -51,7 +52,7 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({ onSuccess, vehicleToEd
 
   const { control, handleSubmit, watch, formState: { errors }, reset, setValue, getValues } = useForm<VehicleFormData>({
     resolver: zodResolver(activeSchema),
-    defaultValues: { images: [], title: '', color: '', vin: '', description: '', price: 0, brandId: 0, modelId: 0, yearId: 0, agencyId: 0 },
+    defaultValues: { images: [], title: '', color: '', vin: '', description: '', price: 0, mileage: 0, brandId: 0, modelId: 0, yearId: 0, agencyId: 0 },
   });
 
   const { data: brands = [] } = useQuery<Brand[]>({ queryKey: ['brands'], queryFn: fetchBrands });
@@ -65,13 +66,13 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({ onSuccess, vehicleToEd
     if (vehicleToEdit && brands.length > 0 && agencies.length > 0) {
       reset({
         title: vehicleToEdit.title, brandId: vehicleToEdit.brand.id, modelId: vehicleToEdit.model.id,
-        yearId: vehicleToEdit.year.id, agencyId: vehicleToEdit.agency.id, price: vehicleToEdit.price,
+        yearId: vehicleToEdit.year.id, agencyId: vehicleToEdit.agency.id, price: vehicleToEdit.price, mileage: vehicleToEdit.mileage,
         color: vehicleToEdit.color, vin: vehicleToEdit.vin, description: vehicleToEdit.description,
         images: [],
       });
       setImagePreviews(vehicleToEdit.images.map(img => img.url));
     } else if (!vehicleToEdit) {
-      reset({ title: '', images: [], brandId: 0, modelId: 0, yearId: 0, agencyId: 0, price: 0, color: '', vin: '', description: '' });
+      reset({ title: '', images: [], brandId: 0, modelId: 0, yearId: 0, agencyId: 0, price: 0, mileage: 0, color: '', vin: '', description: '' });
       setImagePreviews([]);
     }
   }, [vehicleToEdit, brands, agencies, reset]);
@@ -87,13 +88,13 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({ onSuccess, vehicleToEd
       if (data.images && data.images.length > 0) {
         updatedImages = data.images.map((file, index) => ({ id: Date.now() + index, url: URL.createObjectURL(file), isCover: index === 0 }));
       }
-      const updatedVehicle = { ...vehicleToEdit, title: data.title, brand, model, year, agency, price: data.price, color: data.color, description: data.description || '', vin: data.vin || '', images: updatedImages };
+      const updatedVehicle = { ...vehicleToEdit, title: data.title, brand, model, year, agency, price: data.price, mileage: data.mileage, color: data.color, description: data.description || '', vin: data.vin || '', images: updatedImages };
       updateVehicle(updatedVehicle);
     } else {
       if (!data.images) return;
       const newImages: ImageType[] = data.images.map((file, index) => ({ id: Date.now() + index, url: URL.createObjectURL(file), isCover: index === 0 }));
       addVehicle({
-        title: data.title, status: 'DISPONIBLE', brand, model, year, agency, price: data.price, color: data.color, description: data.description || '', vin: data.vin || '', createdBy: 'admin', images: newImages,
+        title: data.title, status: 'DISPONIBLE', brand, model, year, agency, price: data.price, mileage: data.mileage, color: data.color, description: data.description || '', vin: data.vin || '', createdBy: 'admin', images: newImages,
         isFeatured: false
       });
     }
@@ -170,6 +171,9 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({ onSuccess, vehicleToEd
         </Grid>
         <Grid item xs={12} sm={6}>
           <Controller name="price" control={control} render={({ field }) => ( <TextField {...field} value={field.value || ''} label="Precio" type="number" fullWidth error={!!errors.price} helperText={errors.price?.message} onChange={e => field.onChange(parseFloat(e.target.value) || undefined)} /> )}/>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Controller name="mileage" control={control} render={({ field }) => ( <TextField {...field} value={field.value || ''} label="Kilometraje" type="number" fullWidth error={!!errors.mileage} helperText={errors.mileage?.message} onChange={e => field.onChange(parseFloat(e.target.value) || undefined)} /> )}/>
         </Grid>
         <Grid item xs={12} sm={6}>
           <Controller name="color" control={control} render={({ field }) => ( <TextField {...field} label="Color" fullWidth error={!!errors.color} helperText={errors.color?.message} /> )}/>

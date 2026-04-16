@@ -33,11 +33,19 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   }, [priceRange]);
 
   return (
-    <Paper elevation={2} sx={{ p: 2, position: 'sticky', top: '24px' }}>
-      <Typography variant="h6" gutterBottom>Filtros</Typography>
-      <Divider sx={{ my: 2 }} />
+    <Paper
+      elevation={2}
+      sx={{
+        p: { xs: 2.5, sm: 3 },
+        position: 'sticky',
+        top: '24px',
+        borderRadius: 3
+      }}
+    >
+      <Typography variant="h6" gutterBottom sx={{ mb: 1.5 }}>Filtros</Typography>
+      <Divider sx={{ my: 2.5 }} />
       
-      <FormControl fullWidth sx={{ mb: 2 }}>
+      <FormControl fullWidth sx={{ mb: 4 }}>
         <InputLabel>Marca</InputLabel>
         <Select name="brandId" value={filters.brandId} label="Marca" onChange={onFilterChange}>
           <MenuItem value={0}><em>Todas</em></MenuItem>
@@ -45,7 +53,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
         </Select>
       </FormControl>
 
-      <FormControl fullWidth sx={{ mb: 2 }} disabled={filters.brandId === 0 || isLoadingModels}>
+      <FormControl fullWidth sx={{ mb: 3 }} disabled={filters.brandId === 0 || isLoadingModels}>
         <InputLabel>Modelo</InputLabel>
         <Select name="modelId" value={filters.modelId} label="Modelo" onChange={onFilterChange}>
           <MenuItem value={0}><em>Todos</em></MenuItem>
@@ -61,9 +69,9 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
         </Select>
       </FormControl>
 
-      <Typography gutterBottom>Rango de Precio</Typography>
+      <Typography gutterBottom sx={{ mb: 2 }}>Rango de Precio</Typography>
       {/* Contenedor para el Slider con padding horizontal */}
-      <Box sx={{ px: 1 }}>
+      <Box sx={{ px: 1, mb: 1.5 }}>
         <Slider
           value={localPriceRange}
           onChange={(_e, newValue) => setLocalPriceRange(newValue as number[])} // Actualiza solo la vista
@@ -76,7 +84,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           disableSwap
         />
       </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 1 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 1, pt: 0.5 }}>
         <Typography variant="body2">${localPriceRange[0].toLocaleString('es-MX')}</Typography>
         <Typography variant="body2">${localPriceRange[1].toLocaleString('es-MX')}</Typography>
       </Box>
@@ -132,9 +140,8 @@ export const PublicCatalogPage = () => {
 
   return (
     <Box>
-      <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>Nuestro Inventario</Typography>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={3} lg={2}>
+        <Grid item xs={12} md={4} lg={3}>
           <FilterSidebar
             brands={brands} models={models} years={years}
             isLoadingModels={isLoadingModels} isLoadingYears={isLoadingYears}
@@ -145,11 +152,11 @@ export const PublicCatalogPage = () => {
             priceDomain={priceDomain}
           />
         </Grid>
-        <Grid item xs={12} md={9} lg={10}>
+        <Grid item xs={12} md={8} lg={9}>
           <Grid container spacing={3}>
             {filteredVehicles.length > 0 ? (
               filteredVehicles.map((vehicle) => (
-                <Grid item key={vehicle.id} xs={12} sm={6} md={4} lg={3}>
+                <Grid item key={vehicle.id} xs={12} sm={6} md={6} lg={4}>
                   <VehicleCard vehicle={vehicle} />
                 </Grid>
               ))

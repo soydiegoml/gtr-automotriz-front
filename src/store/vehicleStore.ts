@@ -35,6 +35,7 @@ const generateInitialVehicles = (): Vehicle[] => {
     const agency = agencies[Math.floor(Math.random() * agencies.length)];
     const color = colors[Math.floor(Math.random() * colors.length)];
     const price = Math.floor(Math.random() * (800000 - 150000 + 1)) + 150000;
+    const mileage = Math.floor(Math.random() * (140000 - 12000 + 1)) + 12000;
     const status = Math.random() > 0.3 ? 'DISPONIBLE' : 'VENDIDO';
 
     vehicles.push({
@@ -46,6 +47,7 @@ const generateInitialVehicles = (): Vehicle[] => {
       agency,
       year,
       color,
+      mileage,
       vin: `VIN${i.toString().padStart(10, '0')}`,
       description: 'Vehículo en excelentes condiciones, listo para cualquier prueba.',
       price,

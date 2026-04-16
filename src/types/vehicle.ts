@@ -12,6 +12,7 @@ export interface Vehicle {
   agency: Agency;
   year: Year;
   color: string;
+  mileage: number;
   vin: string;
   description: string;
   price: number; // Equivalente a BigDecimal
